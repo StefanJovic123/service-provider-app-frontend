@@ -1,32 +1,34 @@
 import React from 'react';
-import { Redirect } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 import GridContainer from '../../components/Grid/GridContainer';
 import GridItem from '../../components/Grid/GridItem';
 import LoginForm from './LoginForm';
 
-const Login = ({
-  onValuesChange,
-  onLogin,
-  succeed,
-  loading
-}) => {
+// services
+import { useLoginMutation } from '../../services/serviceProviderApi';
 
-  if (succeed) {
-    return <Redirect
-      to={{
-        pathname: '/',
-      }}
-    />;
+const Login = () => {
+  const [login, { isLoading, error, data, isSuccess }] = useLoginMutation();
+  const history = useHistory();
+
+  const onLogin = async (body) => {
+    try {
+      await login(body).unwrap().then(response => {
+        window.localStorage.setItem('jwt', response.data.jwt);
+        history.push('/');
+      });
+    } catch (e) {
+      // show toast
+    }
   }
 
   return (
     <GridContainer justify='center'>
       <GridItem xs={22} sm={16} md={14} lg={10} xl={8} xxl={6}>
         <LoginForm
-          onValuesChange={onValuesChange}
           onSubmit={onLogin}
-          loading={loading}
+          loading={isLoading}
         />
       </GridItem>
     </GridContainer>

@@ -16,12 +16,11 @@ import {
   tailLayout
 } from './loginFormProps';
 
-const LoginForm = ({ onValuesChange, onSubmit, loading }) => {
+const LoginForm = ({ onSubmit, loading }) => {
 
   return (
     <Card>
       <Form
-        onValuesChange={onValuesChange}
         onFinish={onSubmit}
         {...formProps}
       >
@@ -73,10 +72,7 @@ const LoginForm = ({ onValuesChange, onSubmit, loading }) => {
 };
 
 LoginForm.propTypes = {
-  onValuesChange: func.isRequired,
   onSubmit: func.isRequired,
-  error: bool,
-  loginAttempts: number,
   loading: bool
 };
 

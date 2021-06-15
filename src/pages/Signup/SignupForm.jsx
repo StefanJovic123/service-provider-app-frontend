@@ -18,12 +18,11 @@ import {
   tailLayout
 } from './signupFormProps';
 
-const LoginForm = ({ onValuesChange, onSubmit, loading }) => {
+const LoginForm = ({ onSubmit, loading }) => {
 
   return (
     <Card>
       <Form
-        onValuesChange={onValuesChange}
         onFinish={onSubmit}
         {...formProps}
       >
