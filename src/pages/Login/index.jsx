@@ -16,7 +16,9 @@ const Login = () => {
     try {
       await login(body).unwrap().then(response => {
         window.localStorage.setItem('jwt', response.data.jwt);
-        history.push('/');
+        window.localStorage.setItem('skillsSet', response.data.skillsSet);
+        
+        history.push('/complete-profile');
       });
     } catch (e) {
        // show error in notification

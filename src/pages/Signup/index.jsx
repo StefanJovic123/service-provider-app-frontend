@@ -16,7 +16,7 @@ const SignUp = () => {
     try {
       await signup(body).unwrap().then(response => {
         window.localStorage.setItem('jwt', response.data.jwt);
-        history.push('/');
+        history.push('/complete-profile');
       });
     } catch (e) {
        // show error in notification
