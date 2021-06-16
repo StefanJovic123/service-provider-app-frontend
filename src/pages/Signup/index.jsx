@@ -1,6 +1,6 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-
+import { openNotification } from '../../utils/notifications';
 import GridContainer from '../../components/Grid/GridContainer';
 import GridItem from '../../components/Grid/GridItem';
 import SignupForm from './SignupForm';
@@ -19,7 +19,19 @@ const SignUp = () => {
         history.push('/');
       });
     } catch (e) {
-      // show toast
+       // show error in notification
+       if (e.data) {
+        openNotification({
+          message: 'Error', 
+          description: e.data.message
+        });
+
+        return;
+      } else {
+        openNotification('Something went wrong, please try again.', '', null);
+      }
+      
+      console.log('e', e);
     }
   }
 

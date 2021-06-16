@@ -11,6 +11,9 @@ function App() {
         {routes.map(route => (
           <RouteWrapper key={route.path} {...route} />
         ))}
+
+        <RouteWrapper exact path="/" component={() => <div></div>} layout={() => (<div></div>)}/>
+                    
       </Switch>
     </Router>
   )

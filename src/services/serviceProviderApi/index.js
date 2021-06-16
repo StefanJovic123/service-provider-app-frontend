@@ -2,9 +2,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 // Define a service using a base URL and expected endpoints
-
-console.log('process.env.API_URL', process.env.REACT_APP_API_URL)
-
 export const serviceProviderApi = createApi({
   reducerPath: 'serviceProviderApi',
   baseQuery: fetchBaseQuery({ baseUrl: process.env.REACT_APP_API_URL }),
@@ -26,6 +23,67 @@ export const serviceProviderApi = createApi({
       }),
       invalidatesTags: [{ type: 'Post', id: 'SIGNUP' }],
     }),
+
+    getSkills: builder.query({
+      query: () => ({
+        url: 'skills',
+        method: 'GET',
+        transformResponse: (response) => response.data,
+        headers: {
+          Authorization: `Bearer ${window.localStorage.getItem('jwt')}`
+        }
+      }),
+      invalidatesTags: [{ type: 'Get', id: 'SKILLS' }],
+    }),
+
+    pickSkill: builder.mutation({
+      query: (body) => ({
+        url: 'user-skills',
+        method: 'POST',
+        body,
+        headers: {
+          Authorization: `Bearer ${window.localStorage.getItem('jwt')}`
+        }
+      }),
+      invalidatesTags: [{ type: 'Get', id: 'SKILLS' }],
+    }),
+
+
+    completeProfile: builder.mutation({
+      query: (body) => ({
+        url: 'complete-profile',
+        method: 'POST',
+        body,
+        headers: {
+          Authorization: `Bearer ${window.localStorage.getItem('jwt')}`
+        }
+      }),
+      invalidatesTags: [{ type: 'Get', id: 'SKILLS' }],
+    }),
+
+    getRequests: builder.query({
+      query: () => ({
+        url: 'requests',
+        method: 'GET',
+        transformResponse: (response) => response.data,
+        headers: {
+          Authorization: `Bearer ${window.localStorage.getItem('jwt')}`
+        }
+      }),
+      invalidatesTags: [{ type: 'Get', id: 'SKILLS' }],
+    }),
+
+    pickRequest: builder.mutation({
+      query: (requestId) => ({
+        url: `user-requests`,
+        method: 'POST',
+        body: { requestId },
+        headers: {
+          Authorization: `Bearer ${window.localStorage.getItem('jwt')}`
+        }
+      }),
+      invalidatesTags: [{ type: 'Get', id: 'SKILLS' }],
+    }),
   }),
 })
 
@@ -34,4 +92,9 @@ export const serviceProviderApi = createApi({
 export const {
   useLoginMutation,
   useSignupMutation,
+  useGetSkillsQuery,
+  useGetRequestsQuery,
+  usePickRequestMutation,
+  usePickSkillMutation,
+  useCompleteProfileMutation
 } = serviceProviderApi;

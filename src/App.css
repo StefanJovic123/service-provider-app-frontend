@@ -40,9 +40,18 @@
 }
 
 .ant-layout-content {
-  padding: 0px 50px;
+  padding: 15px 50px;
 }
 
 .ant-layout {
   min-height: 100vh;
+  background: white;
+}
+
+.ant-layout-header {
+  color: white;
+}
+
+.hoverable:hover {
+  cursor: pointer;
 }

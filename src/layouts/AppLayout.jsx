@@ -3,7 +3,6 @@ import { Layout } from 'antd';
 
 const { Header, Content } = Layout;
 
-
 const AppLayout = ({ children }) => (
   <Layout>
     <Header>Header</Header>
