@@ -9,7 +9,7 @@ import LoginForm from './LoginForm';
 import { useLoginMutation } from '../../services/serviceProviderApi';
 
 const Login = () => {
-  const [login, { isLoading, error, data, isSuccess }] = useLoginMutation();
+  const [login, { isLoading }] = useLoginMutation();
   const history = useHistory();
 
   const onLogin = async (body) => {
@@ -17,7 +17,7 @@ const Login = () => {
       await login(body).unwrap().then(response => {
         window.localStorage.setItem('jwt', response.data.jwt);
         window.localStorage.setItem('skillsSet', response.data.skillsSet);
-        
+
         history.push('/complete-profile');
       });
     } catch (e) {

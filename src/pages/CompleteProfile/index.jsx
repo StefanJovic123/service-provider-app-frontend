@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { List, Space, Skeleton } from 'antd';
+import { List, Space, Skeleton, Rate, Modal } from 'antd';
 import { useHistory } from 'react-router-dom';
-import { CheckOutlined } from '@ant-design/icons';
 import Button from '../../components/Button/Button';
 import { Title } from '../../components/Typography';
 import { openNotification } from '../../utils/notifications';
@@ -9,6 +8,9 @@ import { useGetSkillsQuery, useCompleteProfileMutation } from '../../services/se
 
 const CompleteProfile = () => {
   const history = useHistory();
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [modalData, setModalData] = useState(null);
+
   const { data: response, isLoading, isSuccess } = useGetSkillsQuery();
   const [completeProfile, { isLoading: isCompleteProfileLoading }] = useCompleteProfileMutation();
   const [options, setOptions] = useState([]);
@@ -25,10 +27,30 @@ const CompleteProfile = () => {
     newOptions[index] = {
       ...item,
       checked: !item.checked,
-      experience: item.checked ? 1 : 1
+      experience: item.checked ? 1 : item.experience || 1
     };
 
     setOptions(newOptions);
+
+    if (!item.checked) {
+      setModalData({
+        item: {
+          ...item,
+          checked: !item.checked,
+        },
+        index
+      });
+
+      setIsModalVisible(true)
+    }
+  }
+
+  const updateItem = () => {
+    const newOptions = [...options];
+    newOptions[modalData.index] = modalData.item;
+
+    setOptions(newOptions);
+    setIsModalVisible(false);
   }
 
   const onCompleteProfile = async () => {
@@ -86,13 +108,29 @@ const CompleteProfile = () => {
         dataSource={options}
         renderItem={(item, index) => (
           <List.Item
-            className='hoverable'
-            onClick={() => toggleItem(item, index)}
+            actions={[
+              <Button
+                type='primary'
+                onClick={() => toggleItem(item, index)}>
+                  {item.checked ? 'Unselect' : 'Select'}
+                </Button>, 
+              item.checked ? <Button
+                onClick={() => {
+                  setModalData({
+                    item,
+                    index
+                  });
+
+                  setIsModalVisible(true);
+                }}
+              >
+                Edit
+              </Button> : null
+            ]}
           >
             <List.Item.Meta
               title={item.name}
             />
-            {item.checked && <CheckOutlined />}
           </List.Item>
         )}
       />
@@ -104,6 +142,21 @@ const CompleteProfile = () => {
       >
         Complete Profile
       </Button>
+
+      <Modal title="Set Experience" visible={isModalVisible} onOk={() => updateItem()} onCancel={() => setIsModalVisible(false)}>
+        <Rate 
+          count={10}
+          value={modalData ? modalData.item.experience : 0}
+          onChange={value => setModalData({ 
+            ...modalData,
+            item: {
+              ...modalData.item,
+              experience: value
+            }
+           })}
+          defaultValue={0}
+        />
+      </Modal>
     </Space>
   )
 };
